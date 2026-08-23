@@ -173,7 +173,7 @@ footer code{font-family:var(--mono); font-size:11.5px; color:var(--ink2)}
   <p class="after">After them: cash <b>8.20% to 4.50%</b>, tracking error
   <b>9.23% to 8.60%</b>, momentum <b>47.6% to 43.1%</b>,
   and <b>25 of 400</b> trades used. The two airlines correlate at
-  0.910, so selling both exits one bet rather than two positions.</p>
+  0.910, so selling both exits one bet rather than two positions. Both buys are momentum calls rather than cheap ones: 2319.HK at 34 times earnings on a 3.8% return on equity and 6752.T at 32 times earnings on a 3.8% return on equity. Argue them on the price trend and the catalyst; the value band of 10 and 8 will not survive a question about the multiple.</p>
 
   <h2>The book, and where each line should go</h2>
   <table><thead><tr><th>Line</th><th>Strategy</th><th class="num">Now</th>
@@ -193,11 +193,14 @@ footer code{font-family:var(--mono); font-size:11.5px; color:var(--ink2)}
     <code>weekly/reports/stats-*.md</code>. Regional, sector and sentiment reads in
     <code>macro-*.md</code> and <code>topdown-*.md</code>. Week-by-week position changes in
     <code>weeks-*.md</code>, the account reconciliation in <code>marks-*.md</code>, and every
-    thesis as prose in <code>book-*.md</code>.<br>
+    thesis as prose in <code>book-*.md</code>. What Parallax's own analytics say, what the value
+    sleeve actually costs, and the citation behind each factor band are in
+    <code>vendor-*.md</code>.<br>
     <b>How it is built.</b> Save the account export to
     <code>account/OpenPosition_YYYY-MM-DD.csv</code>, then run <code>marks.py</code>,
-    <code>stats.py</code>, <code>book.py</code>, <code>weeks.py</code> and
-    <code>brief.py</code>.<br>
+    <code>book.py</code>, <code>weeks.py</code>, <code>vendor.py</code>,
+    <code>brief.py</code> and <code>stats.py</code>, or <code>run_week.py</code> to do all of
+    it and publish.<br>
     Prices and weights are the account's own on 2026-08-21. Prepared 2026-08-22. Coursework, not
     investment advice.
   </footer>
