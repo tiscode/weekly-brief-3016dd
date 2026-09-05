@@ -354,6 +354,34 @@ tr.det h4{margin:0 0 3px; font-size:13.5px; font-weight:600}
 tr.det .sub2{font-size:11.5px; color:var(--ink3); margin-bottom:9px}
 tr.det .th{font-family:var(--prose); font-size:13.5px; line-height:1.6; color:var(--ink2);
   margin:0 0 10px; max-width:80ch}
+tr.ch-grp td{background:var(--surface2); padding:9px 12px; border-top:1px solid var(--line)}
+tr.ch-grp b{font-family:var(--mono); font-size:11px; margin:0 10px 0 9px}
+tr.ch-grp span:last-child{font-size:12px; color:var(--ink2)}
+/* regime flow */
+.flow{display:flex; flex-direction:column; align-items:stretch; margin-top:14px}
+.fnode{border:1px solid var(--line); border-radius:var(--radius); background:var(--surface);
+  display:grid; grid-template-columns:44px 1fr 1.35fr; gap:0}
+.fnode .fn-num{font-family:var(--mono); font-size:15px; font-weight:600; color:var(--accent);
+  display:flex; align-items:flex-start; justify-content:center; padding:16px 0; background:var(--surface2);
+  border-right:1px solid var(--line-soft)}
+.fnode .fn-l{padding:14px 16px; border-right:1px solid var(--line-soft)}
+.fnode .fn-r{padding:14px 16px}
+.fnode h4{margin:0 0 6px; font-size:14px; font-weight:600}
+.fnode .fn-tools{font-family:var(--mono); font-size:10.5px; color:var(--ink3); margin-bottom:8px; line-height:1.5}
+.fnode ul{margin:0; padding-left:16px; font-size:12.5px; color:var(--ink2); line-height:1.5}
+.fnode .fn-lbl{font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink3); margin-bottom:6px}
+.fnode dl{margin:0; display:grid; grid-template-columns:auto 1fr; gap:3px 12px; font-size:12.5px}
+.fnode dt{color:var(--ink3); white-space:nowrap}
+.fnode dd{margin:0; color:var(--ink)}
+.fnode .fn-v{margin-top:10px; padding-top:9px; border-top:1px solid var(--line-soft); font-size:12.5px; color:var(--ink2); display:flex; gap:9px; align-items:flex-start}
+.farrow{display:flex; flex-direction:column; align-items:center; padding:2px 0}
+.farrow i{display:block; width:2px; height:14px; background:var(--line)}
+.farrow span{font-family:var(--mono); font-size:10.5px; color:var(--accent-ink); background:var(--accent-soft);
+  padding:3px 9px; border-radius:2px; margin:0; max-width:70ch; text-align:center}
+.farrow b{font-family:var(--mono); font-size:11px; color:var(--ink3)}
+pre.prompt{font-family:var(--mono); font-size:12px; line-height:1.55; white-space:pre-wrap; overflow-wrap:anywhere;
+  background:var(--surface2); border:1px solid var(--line); border-radius:var(--radius); padding:12px 14px; margin:0; color:var(--ink)}
+@media (max-width:760px){.fnode{grid-template-columns:36px 1fr} .fnode .fn-r{grid-column:2; border-top:1px solid var(--line-soft)} .fnode .fn-l{border-right:0}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
 </style>
 
@@ -384,12 +412,14 @@ tr.det .th{font-family:var(--prose); font-size:13.5px; line-height:1.6; color:va
     <a href="#clock">Clock</a>
     <a href="#sleeves">Sleeves</a>
     <a href="#book">Book</a>
+    <a href="#regime">Regime</a>
     <a href="#gaps">Gaps</a>
     <a href="#sector">Sectors</a>
     <a href="#region">Regions</a>
     <a href="#mood">Sentiment</a>
     <a href="#prov">Provenance</a>
     <a href="#topdown">Top down</a>
+    <a href="#china">China</a>
     <a href="#dist">Returns</a>
     <a href="#risk">CAPM</a>
     <a href="#corr">Correlation</a>
@@ -536,8 +566,45 @@ tr.det .th{font-family:var(--prose); font-size:13.5px; line-height:1.6; color:va
 </section>
 
 <!-- ============ 5. GAPS ============ -->
+<!-- ============ 06. REGIME FLOW ============ -->
+<section id="regime" data-tab="research">
+  <div class="sec-head"><span class="sec-num">06</span><h2>How the regime is read, and what it tells the screen</h2></div>
+  <p class="sec-note">The same seven steps every week, in this order, before any screen is run. Each
+  arrow is labelled with the artefact that moves to the next step, so a reader can see what a step
+  produces and what the next one consumes. The right-hand column of every box is this week's
+  reading; the left is what the step always reads. The last box is the prompt the portfolio builder
+  is given, derived from the steps above it rather than written from taste. Sections 06a to 06g
+  below are the component reads this flow draws on.</p>
+  <div class="hero" id="rgHero"></div>
+  <div class="flow" id="rgFlow"></div>
+  <h3 class="blk" style="margin-top:20px">6 &middot; The market rule, worked</h3>
+  <p class="blk-note" id="rgMktNote"></p>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr>
+        <th>Market</th><th>Ccy</th><th class="num">Baskets</th><th class="num">YTD</th>
+        <th class="num">Week</th><th class="num">Month</th><th class="num">YTD breadth</th>
+        <th class="num">Week breadth</th><th>Result</th>
+      </tr></thead>
+      <tbody id="rgMkts"></tbody>
+    </table>
+  </div>
+  <div class="card card-pad" style="margin-top:18px">
+    <h3 class="blk">7 &middot; The builder prompt this produces</h3>
+    <p class="blk-note">Paste as the thesis to <b>/parallax-portfolio-builder</b>. The universe builder
+    reads markets, sectors and size from the text; the floors underneath are applied to what it returns.</p>
+    <pre class="prompt" id="rgPrompt"></pre>
+    <div class="tbl-wrap" style="margin-top:12px"><table>
+      <thead><tr><th>Floor</th><th>Setting</th><th>Why, from the flow</th></tr></thead>
+      <tbody id="rgGates"></tbody></table></div>
+  </div>
+  <h3 class="blk" style="margin-top:20px">What would change the call</h3>
+  <ul class="plain" id="rgFals"></ul>
+  <p class="blk-note" id="rgFoot"></p>
+</section>
+
 <section id="gaps" data-tab="research">
-  <div class="sec-head"><span class="sec-num">06</span><h2>Where the book is lopsided</h2></div>
+  <div class="sec-head"><span class="sec-num">06a</span><h2>Where the book is lopsided</h2></div>
   <p class="sec-note">Two of these are structural holes the replacement screen should be pointed at. The rest are concentrations a marker will press on, and the industrials overweight and the airlines bet are the same bet counted twice.</p>
   <div class="grid2">
     <div class="card card-pad">
@@ -690,6 +757,33 @@ tr.det .th{font-family:var(--prose); font-size:13.5px; line-height:1.6; color:va
   <h3 class="blk" style="margin-top:22px">What the desk wrote</h3>
   <div class="td-cmt" id="tdCmt"></div>
   <p class="blk-note" id="tdSrc"></p>
+</section>
+
+<!-- ============ 6g. CHINA SCREEN ============ -->
+<section id="china" data-tab="research">
+  <div class="sec-head"><span class="sec-num">06g</span><h2>A China screen, and why it disagrees with the tape</h2></div>
+  <p class="sec-note">Run on 1 September against the fund's own floors: a settleable currency,
+  overall of 9.0 or better, a live tactical of 5 or better, a four-week tactical median of 5 or
+  better and 5% upside to the mean analyst target. Every line here is Hong Kong listed and prices
+  in HKD, which settles. Mainland A-shares are excluded because CNY does not. The column that
+  matters is <b>vs 200d</b>: the Hang Seng rallied 13.1% on the month, but only two of the ten
+  names that clear the floors trade above their own 200-day average, and the book's mean distance
+  to it is negative. This is a mean-reversion screen wearing a growth label, and the table says so
+  line by line rather than hiding it in an average.</p>
+  <div class="hero" id="chHero"></div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr>
+        <th>Name</th><th>Sector</th><th class="num">Total</th>
+        <th class="num">V</th><th class="num">Q</th><th class="num">M</th>
+        <th class="num">D</th><th class="num">T</th><th class="num">4wk</th>
+        <th class="num">Upside</th><th class="num">vs 200d</th><th class="num">ADV $m</th>
+        <th>What the chart says</th>
+      </tr></thead>
+      <tbody id="chBody"></tbody>
+    </table>
+  </div>
+  <p class="blk-note" id="chFoot"></p>
 </section>
 
 <!-- ============ 6f. RETURN STATISTICS ============ -->
@@ -4368,6 +4462,821 @@ const LOG = [
    p:"USD 100,000,000 against MSCI ACWI. Global long-only equity, shares and equity funds only, 300 trades for the period."}
 ];
 /* @@LOG_END@@ */
+/* @@REGIME_START@@ */
+const REGIME = {
+ "asOf": "2026-09-05",
+ "vintages": {
+  "telemetry": "2026-09-03",
+  "factors": "2026-09-04",
+  "macro": "2026-08-14"
+ },
+ "verdict": "Late-cycle stagflation-lite, in distribution",
+ "nodes": [
+  {
+   "num": "0",
+   "id": "vint",
+   "title": "Check the data vintages",
+   "tools": [
+    "get_telemetry metadata",
+    "macro_analyst report_date"
+   ],
+   "reads": [
+    "telemetry as-of",
+    "factor commentary generated_at",
+    "macro report date"
+   ],
+   "out": "dated inputs, with anything over three weeks old flagged",
+   "now": [
+    [
+     "Telemetry",
+     "2026-09-03",
+     "pos"
+    ],
+    [
+     "Factor commentary",
+     "2026-09-04",
+     "pos"
+    ],
+    [
+     "Macro report",
+     "2026-08-14",
+     "warn"
+    ]
+   ],
+   "verdict": [
+    "Macro layer is 22 days old and is weighted down where it disagrees with the tape",
+    "p-trim"
+   ]
+  },
+  {
+   "num": "1",
+   "id": "tape",
+   "title": "Read the tape",
+   "tools": [
+    "get_telemetry: regime_tag, commentary, markets, signals"
+   ],
+   "reads": [
+    "regime tag and mechanism",
+    "daily and weekly basket breadth",
+    "markets positive on the week",
+    "baskets in daily versus MTD conflict"
+   ],
+   "out": "tape label and breadth",
+   "now": [
+    [
+     "Regime tag",
+     "Selective rotation",
+     "warn"
+    ],
+    [
+     "Mechanism",
+     "mixed_rotation",
+     ""
+    ],
+    [
+     "Daily breadth",
+     "63%",
+     "pos"
+    ],
+    [
+     "Weekly breadth",
+     "29%",
+     "neg"
+    ],
+    [
+     "Markets up on the week",
+     "10 of 41",
+     "neg"
+    ],
+    [
+     "Conflict baskets",
+     "80 of 379",
+     "warn"
+    ]
+   ],
+   "verdict": [
+    "Daily bounces that fail to convert into weekly gains; second week of selective rotation",
+    "p-trim"
+   ]
+  },
+  {
+   "num": "2",
+   "id": "fac",
+   "title": "Read the factor books",
+   "tools": [
+    "get_telemetry: factor_view.commentary, factor_view.portfolios"
+   ],
+   "reads": [
+    "factor regime label and dominant factor",
+    "cross-market factor correlation",
+    "markets where each long-short book paid, week and month",
+    "six-month quadrant per factor"
+   ],
+   "out": "factor being paid, factor fading, correlation regime",
+   "now": [
+    [
+     "Factor regime",
+     "mixed, from momentum-led on 27 Aug and quality flight on 21 Aug",
+     "warn"
+    ],
+    [
+     "Correlation",
+     "Quality 0.02, Tactical 0.01, Value 0.05, Momentum 0.09; MARKET 0.34",
+     "neg"
+    ],
+    [
+     "Defensive paid",
+     "25 of 41 on the week, six-month laggard in 20",
+     "pos"
+    ],
+    [
+     "Value paid",
+     "23 of 41 on the week",
+     "pos"
+    ],
+    [
+     "Momentum paid",
+     "27 of 41 on the week, 21 on the month",
+     "warn"
+    ],
+    [
+     "Quality paid",
+     "14 of 41",
+     "neg"
+    ]
+   ],
+   "verdict": [
+    "Low volatility is switching on, momentum has gone flat, quality pays nowhere, and there is no global factor tape",
+    "p-trim"
+   ]
+  },
+  {
+   "num": "3",
+   "id": "div",
+   "title": "Read the divergences",
+   "tools": [
+    "get_telemetry: divergences"
+   ],
+   "reads": [
+    "count of rebounds against fatigue",
+    "which baskets and markets"
+   ],
+   "out": "short-cover or trend flag, and the tired baskets",
+   "now": [
+    [
+     "Rebounds",
+     "9",
+     "warn"
+    ],
+    [
+     "Fatigue",
+     "1",
+     ""
+    ],
+    [
+     "Tired",
+     "GB UK Upstream Oil & Gas",
+     "warn"
+    ]
+   ],
+   "verdict": [
+    "Rebound-heavy is what short covering looks like from the inside; UK upstream oil is the one tired basket",
+    "p-trim"
+   ]
+  },
+  {
+   "num": "4",
+   "id": "mac",
+   "title": "Read the macro report",
+   "tools": [
+    "macro_analyst: macro_indicators, fixed_income, liquidity, sectors, factors"
+   ],
+   "reads": [
+    "growth direction",
+    "inflation direction",
+    "policy stance and dissent",
+    "curve shape",
+    "liquidity and sentiment z-scores",
+    "sector ranks"
+   ],
+   "out": "growth and inflation direction, curve, liquidity, sector ranks",
+   "now": [
+    [
+     "Growth",
+     "Q2 GDP 1.5% v 2.1%, payrolls -23k, surprise index -24%",
+     "neg"
+    ],
+    [
+     "Inflation",
+     "CPI re-accelerating, Brent +23.7% to $86.6",
+     "neg"
+    ],
+    [
+     "Policy",
+     "Fed hold 3.50 to 3.75%, 9-3 with hawkish dissent, 61% Sept hike",
+     "warn"
+    ],
+    [
+     "Curve",
+     "bear steepening, 2s10s +49bp, 30-year at a 19-year high",
+     ""
+    ],
+    [
+     "Liquidity",
+     "z -0.39, sentiment 0.37 v 0.09 average",
+     "neg"
+    ],
+    [
+     "Sector ranks",
+     "Financials 1, Energy 2, Real estate 3, Materials 4; Industrials 8, Health care 9, IT 10",
+     ""
+    ]
+   ],
+   "verdict": [
+    "Growth down, inflation up, Fed boxed in, long end selling on fiscal supply",
+    "p-sell"
+   ]
+  },
+  {
+   "num": "5",
+   "id": "thy",
+   "title": "Map to the theory",
+   "tools": [
+    "no tool; the readings from 1 to 4"
+   ],
+   "reads": [],
+   "out": "regime verdict and its falsifiers",
+   "now": [
+    [
+     "Investment Clock",
+     "Stagflation quadrant: cash, then commodities; defensives inside equities; avoid cyclicals and tech",
+     ""
+    ],
+    [
+     "Fiscal dominance",
+     "the clock expects a flattening; this curve steepens on supply, which is why financials rank 1",
+     ""
+    ],
+    [
+     "Minsky, Kindleberger",
+     "euphoria into distribution: multiple-driven high, narrowing breadth, laggard bounces, thinning funding",
+     ""
+    ],
+    [
+     "Betting against beta",
+     "borrowing constraints binding; the low-vol premium switching on after six months of losing",
+     ""
+    ],
+    [
+     "Daniel and Moskowitz",
+     "momentum exhausting at the top as breadth collapses, not the post-bear crash",
+     ""
+    ],
+    [
+     "APT, adaptive markets",
+     "one common risk at 0.34, factor premia decoupled by country; implement by market, not by global tilt",
+     ""
+    ]
+   ],
+   "verdict": [
+    "Late-cycle stagflation-lite, in distribution",
+    "p-sell"
+   ]
+  },
+  {
+   "num": "6",
+   "id": "scr",
+   "title": "Translate to a screen",
+   "tools": [
+    "rules below, applied to the telemetry file"
+   ],
+   "reads": [
+    "markets: settleable, ex-US, three or more baskets, YTD breadth 60% or better and YTD aggregate positive",
+    "sectors: rank 5 or better, energy capped where a fatigue flag exists",
+    "factor floors from stage 2",
+    "liquidity and balance-sheet floors from stage 4"
+   ],
+   "out": "screen spec: markets, sectors, floors, caps",
+   "now": [
+    [
+     "Favoured markets",
+     "Norway (+30%, 100%), Netherlands (+17%, 100%), United Kingdom (+15%, 86%), Canada (+15%, 88%), Japan (+13%, 82%), Switzerland (+11%, 75%), Finland (+10%, 67%), Denmark (+10%, 86%), Spain (+8%, 83%), Belgium (+4%, 100%), Italy (+4%, 67%)",
+     "pos"
+    ],
+    [
+     "Avoided",
+     "Hong Kong (-16%, 10%), Australia (-6%, 38%), Sweden (-4%, 38%), France (-2%, 25%), Germany (-1%, 17%), Singapore (+6%, 57%); and the United States by mandate",
+     "neg"
+    ],
+    [
+     "Sectors",
+     "financials, staples, utilities, real estate, materials; one energy name at most",
+     ""
+    ],
+    [
+     "Not screened for",
+     "quality",
+     ""
+    ]
+   ],
+   "verdict": [
+    "11 markets clear the rule; the ex-US book is built by country first, then by factor",
+    "p-hold"
+   ]
+  }
+ ],
+ "gates": [
+  [
+   "Overall",
+   "9.0 or better",
+   "unchanged fund floor"
+  ],
+  [
+   "Defensive",
+   "7 or better",
+   "the factor turning positive in 25 of 41 markets this week"
+  ],
+  [
+   "Value",
+   "6 or better",
+   "paid in 23 of 41 markets, positive month to date"
+  ],
+  [
+   "Momentum",
+   "5 or better",
+   "year's winner, flat on the month; keep a floor, do not chase it"
+  ],
+  [
+   "Tactical",
+   "5 or better, and a four-week median of 5 or better",
+   "the downtrend rule and the fuse"
+  ],
+  [
+   "Quality",
+   "no floor",
+   "paying in 14 of 41 markets; both fund studies found no signal"
+  ],
+  [
+   "Upside",
+   "5% or better to the mean target",
+   "unchanged fund floor"
+  ],
+  [
+   "Liquidity",
+   "ADV of 10m dollars or more",
+   "liquidity z at -0.39; institutional flow is in liquid names"
+  ],
+  [
+   "Balance sheet",
+   "debt to equity 1.0 or less",
+   "Minsky: the borrowed-money units are sold first"
+  ],
+  [
+   "Caps",
+   "2 per sector, 3 per market, 1 energy",
+   "one common risk, so diversify by country"
+  ]
+ ],
+ "prompt": "Diversified ex-US long-only equity portfolio for a stagflation regime with tightening liquidity. Large and mid cap companies listed in Norway, Netherlands, United Kingdom, Canada, Japan, Switzerland, Finland, Denmark, Spain, Belgium and Italy. Exclude United States, Hong Kong, China and South Korea listings. Sectors: financials, consumer staples, utilities, real estate and materials, with at most one energy name. Characteristics: low share price volatility, strong balance sheet, debt to equity below 1, positive free cash flow, covered dividend, defensive and value factor exposure. Average daily traded value above 10 million US dollars. Exclude semiconductors, IT hardware and airlines.",
+ "skill": "/parallax-portfolio-builder \"Diversified ex-US long-only equity portfolio for a stagflation regime with tightening liquidity. Large and mid cap companies listed in Norway, Netherlands, United Kingdom, Canada, Japan, Switzerland, Finland, Denmark, Spain, Belgium and Italy. Exclude United States, Hong Kong, China and South Korea listings. Sectors: financials, consumer staples, utilities, real estate and materials, with at most one energy name. Characteristics: low share price volatility, strong balance sheet, debt to equity below 1, positive free cash flow, covered dividend, defensive and value factor exposure. Average daily traded value above 10 million US dollars. Exclude semiconductors, IT hardware and airlines.\" top_n=12",
+ "falsifiers": [
+  "FOMC 16 to 17 September: a hike confirms the read, a hold opens one more leg of the narrow rally",
+  "Brent below $80 collapses the energy thesis and the inflation impulse with it",
+  "Daily basket breadth under 40% confirms the 3 September bounce as short covering",
+  "US Defensive L/S holding positive through the FOMC confirms the low-vol regime",
+  "Weekly breadth back above 50% would say distribution ended without a correction"
+ ],
+ "markets": [
+  {
+   "cc": "AT",
+   "name": "Austria",
+   "ccy": "EUR",
+   "n": 2,
+   "ytd": 17.3583,
+   "wtd": -0.1446,
+   "mtd": 0.2862,
+   "brY": 100.0,
+   "brW": 50.0,
+   "ok": false
+  },
+  {
+   "cc": "AU",
+   "name": "Australia",
+   "ccy": "AUD",
+   "n": 8,
+   "ytd": -5.5991,
+   "wtd": -2.2041999999999997,
+   "mtd": -1.2943,
+   "brY": 37.5,
+   "brW": 25.0,
+   "ok": false
+  },
+  {
+   "cc": "BE",
+   "name": "Belgium",
+   "ccy": "EUR",
+   "n": 3,
+   "ytd": 4.1627,
+   "wtd": -0.7494999999999999,
+   "mtd": 0.0762,
+   "brY": 100.0,
+   "brW": 33.33333333333333,
+   "ok": true
+  },
+  {
+   "cc": "CA",
+   "name": "Canada",
+   "ccy": "CAD",
+   "n": 16,
+   "ytd": 15.3601,
+   "wtd": -0.7185,
+   "mtd": -0.4311,
+   "brY": 87.5,
+   "brW": 37.5,
+   "ok": true
+  },
+  {
+   "cc": "CH",
+   "name": "Switzerland",
+   "ccy": "CHF",
+   "n": 4,
+   "ytd": 10.7422,
+   "wtd": -0.7243999999999999,
+   "mtd": -0.0097,
+   "brY": 75.0,
+   "brW": 0.0,
+   "ok": true
+  },
+  {
+   "cc": "DE",
+   "name": "Germany",
+   "ccy": "EUR",
+   "n": 6,
+   "ytd": -0.8482,
+   "wtd": -1.8386,
+   "mtd": -1.2053,
+   "brY": 16.666666666666664,
+   "brW": 16.666666666666664,
+   "ok": false
+  },
+  {
+   "cc": "DK",
+   "name": "Denmark",
+   "ccy": "DKK",
+   "n": 7,
+   "ytd": 9.9136,
+   "wtd": -0.5839,
+   "mtd": 0.21450000000000002,
+   "brY": 85.71428571428571,
+   "brW": 28.57142857142857,
+   "ok": true
+  },
+  {
+   "cc": "ES",
+   "name": "Spain",
+   "ccy": "EUR",
+   "n": 6,
+   "ytd": 7.8588000000000005,
+   "wtd": -0.6795,
+   "mtd": 0.22799999999999998,
+   "brY": 83.33333333333334,
+   "brW": 50.0,
+   "ok": true
+  },
+  {
+   "cc": "FI",
+   "name": "Finland",
+   "ccy": "EUR",
+   "n": 3,
+   "ytd": 10.4602,
+   "wtd": -1.6447,
+   "mtd": -0.5075999999999999,
+   "brY": 66.66666666666666,
+   "brW": 0.0,
+   "ok": true
+  },
+  {
+   "cc": "FR",
+   "name": "France",
+   "ccy": "EUR",
+   "n": 8,
+   "ytd": -1.9316,
+   "wtd": -1.1716,
+   "mtd": -0.6007,
+   "brY": 25.0,
+   "brW": 0.0,
+   "ok": false
+  },
+  {
+   "cc": "GB",
+   "name": "United Kingdom",
+   "ccy": "GBP",
+   "n": 7,
+   "ytd": 15.3858,
+   "wtd": -1.09,
+   "mtd": -1.09,
+   "brY": 85.71428571428571,
+   "brW": 14.285714285714285,
+   "ok": true
+  },
+  {
+   "cc": "HK",
+   "name": "Hong Kong",
+   "ccy": "HKD",
+   "n": 10,
+   "ytd": -15.762699999999999,
+   "wtd": -2.1918,
+   "mtd": -0.8332,
+   "brY": 10.0,
+   "brW": 10.0,
+   "ok": false
+  },
+  {
+   "cc": "IT",
+   "name": "Italy",
+   "ccy": "EUR",
+   "n": 3,
+   "ytd": 3.7149,
+   "wtd": -1.5372999999999999,
+   "mtd": -1.3697000000000001,
+   "brY": 66.66666666666666,
+   "brW": 0.0,
+   "ok": true
+  },
+  {
+   "cc": "JP",
+   "name": "Japan",
+   "ccy": "JPY",
+   "n": 33,
+   "ytd": 13.107099999999999,
+   "wtd": -1.7529,
+   "mtd": -2.0261,
+   "brY": 81.81818181818183,
+   "brW": 15.151515151515152,
+   "ok": true
+  },
+  {
+   "cc": "NL",
+   "name": "Netherlands",
+   "ccy": "EUR",
+   "n": 3,
+   "ytd": 16.775399999999998,
+   "wtd": -0.6866,
+   "mtd": -0.2841,
+   "brY": 100.0,
+   "brW": 33.33333333333333,
+   "ok": true
+  },
+  {
+   "cc": "NO",
+   "name": "Norway",
+   "ccy": "NOK",
+   "n": 4,
+   "ytd": 30.284899999999997,
+   "wtd": 0.2405,
+   "mtd": -0.6311,
+   "brY": 100.0,
+   "brW": 50.0,
+   "ok": true
+  },
+  {
+   "cc": "PT",
+   "name": "Portugal",
+   "ccy": "EUR",
+   "n": 1,
+   "ytd": 10.9373,
+   "wtd": -0.1114,
+   "mtd": -0.22999999999999998,
+   "brY": 100.0,
+   "brW": 0.0,
+   "ok": false
+  },
+  {
+   "cc": "SE",
+   "name": "Sweden",
+   "ccy": "SEK",
+   "n": 13,
+   "ytd": -3.8424,
+   "wtd": -0.4246,
+   "mtd": 0.3312,
+   "brY": 38.46153846153847,
+   "brW": 15.384615384615385,
+   "ok": false
+  },
+  {
+   "cc": "SG",
+   "name": "Singapore",
+   "ccy": "SGD",
+   "n": 7,
+   "ytd": 6.3271999999999995,
+   "wtd": -0.364,
+   "mtd": -0.5440999999999999,
+   "brY": 57.14285714285714,
+   "brW": 42.857142857142854,
+   "ok": false
+  }
+ ]
+};
+/* @@REGIME_END@@ */
+/* @@CHINA_START@@ */
+const CHINA = {
+ "asOf": "2026-09-01",
+ "screened": 75,
+ "cleared": 14,
+ "floors": {
+  "total": 9.0,
+  "tactical": 5,
+  "med4": 5,
+  "upside": 5.0
+ },
+ "rows": [
+  {
+   "t": "2359.HK",
+   "name": "WuXi AppTec",
+   "sector": "Health care",
+   "tier": 1,
+   "total": 9.5,
+   "v": 2,
+   "q": 10,
+   "m": 9,
+   "d": 6,
+   "tac": 6,
+   "med4": 6.0,
+   "d200": 45.77,
+   "adv": 171.0,
+   "note": "The one line in an intermediate uptrend, 45.8% above the 200-day after a 56.5% ninety-day run. Pulling back short term: under the 20-day and the MACD has crossed bearish. Support sits at 171.68 to 184.32.",
+   "up": 12.2
+  },
+  {
+   "t": "2331.HK",
+   "name": "Li Ning",
+   "sector": "Consumer cyclicals",
+   "tier": 2,
+   "total": 9.6,
+   "v": 9,
+   "q": 10,
+   "m": 5,
+   "d": 10,
+   "tac": 7,
+   "med4": 9.5,
+   "d200": -25.64,
+   "adv": 37.0,
+   "note": "Confirmed downtrend, 2.9% above the 52-week low, RSI at the 11th percentile of the year. The 9.5 fuse reading is relative strength inside a falling market, not a turn.",
+   "up": 44.3
+  },
+  {
+   "t": "1368.HK",
+   "name": "Xtep International",
+   "sector": "Consumer cyclicals",
+   "tier": 2,
+   "total": 9.6,
+   "v": 10,
+   "q": 9,
+   "m": 4,
+   "d": 10,
+   "tac": 8,
+   "med4": 9.5,
+   "d200": -21.38,
+   "adv": 4.0,
+   "note": "Squeezed between the 20-day at 3.62 and the 50-day at 3.69, 21.4% under the 200-day. Reward to risk is negative at -0.46. Same consumer-brand trade as Li Ning.",
+   "up": 32.1
+  },
+  {
+   "t": "3998.HK",
+   "name": "Bosideng",
+   "sector": "Consumer cyclicals",
+   "tier": 2,
+   "total": 9.4,
+   "v": 7,
+   "q": 10,
+   "m": 6,
+   "d": 9,
+   "tac": 9,
+   "med4": 9.0,
+   "d200": -5.86,
+   "adv": 13.7,
+   "note": "Below all three averages with RSI 30.4, the 11th percentile of its year. Sellers are active rather than exhausted: the 3.3% fall came on 1.89x average volume.",
+   "up": 27.9
+  },
+  {
+   "t": "0288.HK",
+   "name": "WH Group",
+   "sector": "Consumer staples",
+   "tier": 2,
+   "total": 9.4,
+   "v": 8,
+   "q": 10,
+   "m": 6,
+   "d": 9,
+   "tac": 5,
+   "med4": 8.5,
+   "d200": -17.67,
+   "adv": 42.0,
+   "note": "Confirmed downtrend, 2.1% above the 52-week low, RSI 27.7 in the bottom 2% of the year. The 5.9% fall came on 2.17x volume. No analyst target published.",
+   "up": null
+  },
+  {
+   "t": "0826.HK",
+   "name": "Tiangong International",
+   "sector": "Basic materials",
+   "tier": 2,
+   "total": 9.1,
+   "v": 10,
+   "q": 5,
+   "m": 9,
+   "d": 5,
+   "tac": 10,
+   "med4": 10.0,
+   "d200": -4.21,
+   "adv": 5.4,
+   "note": "The one clean bounce in the screen: up 12.8% in five sessions on 4.53x volume, back over the 20-day and 50-day, still 4.2% under the 200-day. Trading above its upper Bollinger band, so it wants a pullback before it is worth paying for.",
+   "up": null
+  },
+  {
+   "t": "3393.HK",
+   "name": "Wasion Holdings",
+   "sector": "Industrials",
+   "tier": 3,
+   "total": 9.9,
+   "v": 8,
+   "q": 9,
+   "m": 10,
+   "d": 3,
+   "tac": 10,
+   "med4": 1.5,
+   "d200": -28.58,
+   "adv": 8.1,
+   "note": "Down 47.6% over ninety days, under all three averages, realised volatility 77% annualised and ATR at the 97th percentile. The target was set before the derating. Any entry here is a bet on support holding inside a falling structure.",
+   "up": 105.7
+  },
+  {
+   "t": "1133.HK",
+   "name": "Harbin Electric",
+   "sector": "Industrials",
+   "tier": 3,
+   "total": 9.4,
+   "v": 10,
+   "q": 6,
+   "m": 9,
+   "d": 3,
+   "tac": 5,
+   "med4": 2.0,
+   "d200": -11.33,
+   "adv": 12.1,
+   "note": "Rangebound. Over the 50-day but 11.3% under the 200-day with MACD bearish, and still 41.8% below the 52-week high. The bounce has no volume behind it.",
+   "up": 75.9
+  },
+  {
+   "t": "3899.HK",
+   "name": "CIMC Enric",
+   "sector": "Energy",
+   "tier": 3,
+   "total": 9.2,
+   "v": 9,
+   "q": 6,
+   "m": 10,
+   "d": 9,
+   "tac": 9,
+   "med4": 4.5,
+   "d200": -19.04,
+   "adv": 3.6,
+   "note": "Sitting on the 50-day, 19.0% under the 200-day. A bearish MACD crossover against a Parallax momentum of 10 is the conflict to resolve before this is actionable.",
+   "up": 56.1
+  },
+  {
+   "t": "0856.HK",
+   "name": "VSTECS Holdings",
+   "sector": "Technology",
+   "tier": 3,
+   "total": 9.3,
+   "v": 10,
+   "q": 7,
+   "m": 7,
+   "d": 4,
+   "tac": 9,
+   "med4": 1.0,
+   "d200": 9.5,
+   "adv": 5.5,
+   "note": "Above the 50-day and the 200-day and up 22.2% on the year, the only qualifying name doing both. Held back by a four-week fuse of 1.0 and reward to risk of -0.54. The closest thing in the screen to a China name that is actually rising.",
+   "up": null
+  }
+ ],
+ "profile": {
+  "n": 10,
+  "total": 9.44,
+  "value": 8.3,
+  "quality": 8.2,
+  "momentum": 7.5,
+  "defensive": 6.8,
+  "tactical": 7.8,
+  "up": 50.6,
+  "upN": 7,
+  "upLow": 12.2,
+  "above200": 2,
+  "mean200": -7.8
+ }
+};
+/* @@CHINA_END@@ */
 
 /* =========================================================================
    RENDER
@@ -4521,7 +5430,7 @@ if (BOOKX && ACCT) {
 /* ---------- top level tabs ---------- */
 (function(){
   const TABS = [["positions","The book","positions, account and the trade list"],
-                ["research","Vendor","sectors, markets, sentiment. Dated 14 to 21 August"],
+                ["research","Vendor","regime flow, sectors, markets, sentiment. Telemetry 3 September, macro 14 August"],
                 ["analysis","Risk","statistics carried from 21 August, not recomputed"],
                 ["process","Rules","limits, decisions, method and log"]];
   const secs = Array.from(document.querySelectorAll("section[data-tab]"));
@@ -5295,4 +6204,132 @@ $("#tdSrc").textContent = TOPDOWN.source || "";
 /* log */
 $("#logList").innerHTML = LOG.map(l=>`<li>
   <div class="when">${l.when}</div><h4>${l.h}</h4><p>${l.p}</p></li>`).join("");
+/* china screen */
+(function(){
+  const P = CHINA.profile;
+  $("#chHero").innerHTML = `
+    <div><div class="lbl">Above the 200-day</div><div class="big">${P.above200} of ${P.n}</div></div>
+    <div><div class="lbl">Mean overall</div><div class="big">${P.total.toFixed(2)}</div></div>
+    <div><div class="lbl">Mean distance to the 200-day</div><div class="big">${P.mean200.toFixed(1)}%</div></div>
+    <div class="side">${CHINA.screened} names across six sector screens, of which
+    ${CHINA.cleared} cleared the score and tactical floors and ${P.n} survived liquidity and
+    upside. Equal weight the ten and the profile reads value ${P.value.toFixed(1)},
+    quality ${P.quality.toFixed(1)}, momentum ${P.momentum.toFixed(1)},
+    defensive ${P.defensive.toFixed(1)}, tactical ${P.tactical.toFixed(1)}, with mean upside
+    ${P.up > 0 ? "+" : ""}${P.up.toFixed(1)}% across the ${P.upN} names carrying a target.</div>`;
+
+  // the fuse floor is 5, so 4.5 must read as a fail, which Math.round would hide
+  const med = v => {
+    const cls = v < 5 ? "neg" : v === 5 ? "warn" : "pos";
+    return `<b class="${cls}" style="font-weight:600">${v.toFixed(1)}</b>`;
+  };
+  const TIER = {
+    1: ["Chart agrees", "p-hold", "a-hold",
+        "Clears every floor and price is above the 200-day average."],
+    2: ["Chart disagrees", "p-trim", "a-trim",
+        "Clears every floor, including the four-week fuse, but price is below the 200-day average."],
+    3: ["Fails the fuse", "p-sell", "a-sell",
+        "Four-week tactical median is under 5. Tactical only turned in the week of 23 August, "
+        + "which is the single-reading pattern that caught United Therapeutics last week."],
+  };
+  const cols = 13;
+  let out = "";
+  for (const t of [1, 2, 3]) {
+    const rows = CHINA.rows.filter(r => r.tier === t);
+    if (!rows.length) continue;
+    const [label, pill, , blurb] = TIER[t];
+    out += `<tr class="ch-grp"><td colspan="${cols}">
+      <span class="pill ${pill}">${label}</span>
+      <b>${rows.length} name${rows.length === 1 ? "" : "s"}</b>
+      <span>${blurb}</span></td></tr>`;
+    out += rows.map(r => `<tr class="${TIER[t][2]}">
+      <td class="nm">${r.name}<em style="display:block;font-style:normal;color:var(--ink3);font-size:11px">${r.t}</em></td>
+      <td class="dim" style="font-size:12px">${r.sector}</td>
+      <td class="num"><b>${r.total.toFixed(1)}</b></td>
+      <td class="num dim">${r.v}</td><td class="num dim">${r.q}</td>
+      <td class="num dim">${r.m}</td><td class="num dim">${r.d}</td>
+      <td class="num">${tac(r.tac)}</td>
+      <td class="num">${med(r.med4)}</td>
+      <td class="num ${r.up === null ? "dim" : r.up >= 5 ? "pos" : "warn"}">${
+        r.up === null ? "n/a" : (r.up > 0 ? "+" : "") + r.up.toFixed(1) + "%"}</td>
+      <td class="num ${r.d200 > 0 ? "pos" : "neg"}">${
+        (r.d200 > 0 ? "+" : "") + r.d200.toFixed(1)}%</td>
+      <td class="num ${r.adv < 6 ? "warn" : "dim"}">${r.adv.toFixed(1)}</td>
+      <td class="why">${r.note}</td></tr>`).join("");
+  }
+  $("#chBody").innerHTML = out;
+
+  const noTgt = CHINA.rows.filter(r => r.up === null).map(r => r.t);
+  const thin = CHINA.rows.filter(r => r.adv < 6).map(r => r.t);
+  $("#chFoot").textContent =
+    "Scores, targets and charts are the Parallax pull of " + CHINA.asOf + "; the four-week median "
+    + "is the tactical reading of the four weeks to 23 August. Upside is the mean analyst target "
+    + "against the price in the same snapshot. " + noTgt.length + " lines carry no published "
+    + "target (" + noTgt.join(", ") + ") and are in on factor evidence alone, so the mean upside "
+    + "is struck across the " + CHINA.profile.upN + " that do. " + thin.length + " lines run under "
+    + "$6m average daily volume (" + thin.join(", ") + "), which is workable at StockTrak scale and "
+    + "would not be at a real one. Three of the ten are the same Chinese consumer-brand trade "
+    + "(2331.HK, 1368.HK, 3998.HK), which the redundancy check flags as 30% in consumer cyclicals. "
+    + "Nothing here is held and nothing here is in the trade plan.";
+})();
+
+/* regime flow */
+(function(){
+  const R = REGIME, V = R.vintages;
+  $("#rgHero").innerHTML = `
+    <div><div class="lbl">Regime</div><div class="big">${R.verdict}</div></div>
+    <div><div class="lbl">Telemetry</div><div class="big">${V.telemetry}</div></div>
+    <div><div class="lbl">Macro report</div><div class="big warn">${V.macro}</div></div>
+    <div class="side">Tape and factor reads are current to ${V.telemetry}. The macro report is the
+    ${V.macro} edition, three weeks old, so where the tape and the macro layer disagree the tape wins
+    and the page says so. Re-run the seven steps before any order goes in.</div>`;
+  const cell = ([k,v,c]) => `<dt>${k}</dt><dd class="${c||""}">${v}</dd>`;
+  $("#rgFlow").innerHTML = R.nodes.map(n => `
+    <div class="fnode" id="rg-${n.id}">
+      <div class="fn-num">${n.num}</div>
+      <div class="fn-l"><h4>${n.title}</h4>
+        <div class="fn-tools">${n.tools.join("<br>")}</div>
+        ${n.reads.length ? `<div class="fn-lbl">reads</div><ul>${n.reads.map(r=>`<li>${r}</li>`).join("")}</ul>` : ""}
+      </div>
+      <div class="fn-r"><div class="fn-lbl">this week</div>
+        <dl>${n.now.map(cell).join("")}</dl>
+        <div class="fn-v"><span class="pill ${n.verdict[1]}">${n.num==="5"?"verdict":"read"}</span><span>${n.verdict[0]}</span></div>
+      </div>
+    </div>
+    <div class="farrow"><i></i><span>${n.out}</span><i></i><b>&#8595;</b></div>`).join("");
+  $("#rgPrompt").textContent = R.skill;
+  $("#rgGates").innerHTML = R.gates.map(g => `<tr><td class="nm">${g[0]}</td><td>${g[1]}</td><td class="why">${g[2]}</td></tr>`).join("");
+  $("#rgFals").innerHTML = R.falsifiers.map(f => `<li>${f}</li>`).join("");
+  const pct = (v,d=1) => (v>0?"+":"") + v.toFixed(d) + "%";
+  const why = m => m.n < 3 ? "under three baskets" : m.ytd <= 0 ? "negative on the year"
+            : m.brY < 60 ? "YTD breadth under 60%" : "";
+  const mk = R.markets.slice().sort((a,b) => (b.ok-a.ok) || (b.ytd-a.ytd));
+  $("#rgMkts").innerHTML = mk.map(m => `<tr class="${m.ok?"a-hold":"a-sell"}">
+    <td class="nm">${m.name}</td><td class="dim">${m.ccy}</td>
+    <td class="num ${m.n<3?"warn":"dim"}">${m.n}</td>
+    <td class="num ${m.ytd<0?"neg":"pos"}">${pct(m.ytd)}</td>
+    <td class="num ${m.wtd<0?"neg":"pos"}">${pct(m.wtd,2)}</td>
+    <td class="num ${m.mtd<0?"neg":"pos"}">${pct(m.mtd,2)}</td>
+    <td class="num ${m.brY<60?"neg":"pos"}">${m.brY.toFixed(0)}%</td>
+    <td class="num ${m.brW===0?"neg":m.brW<40?"warn":"dim"}">${m.brW.toFixed(0)}%</td>
+    <td><span class="pill ${m.ok?"p-hold":"p-sell"}">${m.ok?"favoured":"avoided"}</span>${m.ok?"":` <span class="dim" style="font-size:11px">${why(m)}</span>`}</td></tr>`).join("");
+  const favM = R.markets.filter(m=>m.ok);
+  const wkNeg = favM.filter(m=>m.wtd<0).length, wk0 = favM.filter(m=>m.brW===0).map(m=>m.name);
+  $("#rgMktNote").textContent = "Every settleable market outside the United States, against the rule in step 6. "
+    + "The rule selects on the year, which is the right basis for a hold book, and the week columns show the "
+    + "cost of that: " + wkNeg + " of the " + favM.length + " favoured markets are negative on the week"
+    + (wk0.length ? ", and weekly breadth is zero in " + wk0.join(", ") : "")
+    + ". The prompt therefore points the builder at markets that are all inside the same two-week pullback, "
+    + "which is consistent with the distribution call and means the tactical floor and the four-week fuse "
+    + "will do most of the work on whatever comes back.";
+  const fav = favM.length;
+  $("#rgFoot").textContent = "Market rule: a settleable currency, not the United States, at least three baskets, at least 60% of the "
+    + "market's baskets positive for the year and a positive year-to-date aggregate, computed from the "
+    + V.telemetry + " telemetry file in weekly/. " + fav + " of " + R.markets.length
+    + " candidate markets clear it. The sector list uses the United States ranks of " + V.macro
+    + " as the global proxy, with the stagflation-quadrant defensives added; each favoured market's own "
+    + "ranks should be pulled with macro_analyst before the builder output is accepted. Nothing in this "
+    + "section is a holding.";
+})();
+
 </script>
